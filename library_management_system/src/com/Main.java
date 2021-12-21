@@ -1,5 +1,10 @@
 package com;
 
+import database.BookTable;
+import database.GenreTable;
+import database.PostgresSQLJDBC;
+import database.PublisherTable;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 
@@ -10,15 +15,12 @@ public class Main {
 
     public static void main(String[] args) {
 
-        try {
-            Class.forName("org.postgresql.Driver");
-            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/book_shop", "postgres", "anamaria");
-            System.out.println("Opened database successfully");
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println(e.getClass().getName()+": "+e.getMessage());
-            System.exit(0);
-        }
+        PostgresSQLJDBC.connectToDatabase();
+
+        PublisherTable genreTable=new PublisherTable();
+        System.out.println(genreTable.getPublisherId("Treii"));
+
+        PostgresSQLJDBC.closeDatabase();
 
 
  /*       Scanner in = new Scanner(System.in);
