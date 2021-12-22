@@ -25,7 +25,8 @@ public class Book {
         this.genres = genres;
     }
 
-    public Book(int availableQuantity) {
+    public Book(String title, int availableQuantity) {
+        this.title = title;
         this.availableQuantity = availableQuantity;
     }
 

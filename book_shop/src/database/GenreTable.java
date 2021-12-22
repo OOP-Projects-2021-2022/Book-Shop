@@ -113,7 +113,7 @@ public class GenreTable extends PostgresSQLJDBC{
     }
 
     @Override
-    public void deleteFromTable(){
+    public void deleteFromTable(int id){
 
     }
 }

@@ -115,7 +115,7 @@ public class LanguageTable extends PostgresSQLJDBC{
     }
 
     @Override
-    public void deleteFromTable(){
+    public void deleteFromTable(int id){
 
     }
 }

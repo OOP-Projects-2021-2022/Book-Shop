@@ -31,7 +31,7 @@ public abstract class PostgresSQLJDBC {
     public abstract void insertIntoTable(Object obj,User user);
     public abstract void selectFromTable();
     public abstract int generateNextIdAvailable();
-    public abstract void deleteFromTable();
+    public abstract void deleteFromTable(int id);
 
     public static void closeDatabase(){
         try {

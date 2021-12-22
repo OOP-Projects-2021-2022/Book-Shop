@@ -11,11 +11,6 @@ public class Main {
 
         PostgresSQLJDBC.connectToDatabase();
 
-        AuthorTable authorTable=new AuthorTable();
-        authorTable.selectFromTable();
-
-
-
 
  /*       Scanner in = new Scanner(System.in);
         String inputStr, inputOp, name, username,pages;

@@ -151,7 +151,7 @@ public class BookTable extends PostgresSQLJDBC{
                 String  title = rs.getString("title");
                 int nrOfPages  = rs.getInt("pages");
                 int availableQuantity  = rs.getInt("available_quantity");
-                float price = rs.getFloat("price");
+                double price = rs.getFloat("price");
                 int publisherId  = rs.getInt("publisher_id");
                 int languageId  = rs.getInt("language_id");
                 int publicationYear  = rs.getInt("publication_year");
@@ -181,6 +181,7 @@ public class BookTable extends PostgresSQLJDBC{
             Statement stmt = getConnection().createStatement();
             if(user==User.GUEST){
                 String sql = "UPDATE BOOK set available_quantity = available_quantity-1 where ID=" + getBookId(book.getTitle()) + ";";
+                deleteFromTableIfBookIsNotLongerInStock(getBookId(book.getTitle()));
                 stmt.executeUpdate(sql);
             }else if(user==User.LIBRARIAN){
                 String sql = "UPDATE BOOK set available_quantity = available_quantity+" + book.getAvailableQuantity() + " where ID=" + getBookId(book.getTitle()) + ";";
@@ -194,8 +195,39 @@ public class BookTable extends PostgresSQLJDBC{
 
     }
 
+    public void deleteFromTableIfBookIsNotLongerInStock(int id){
+        int availableQuantity=0;
+        try {
+            Statement stmt = getConnection().createStatement();
+            ResultSet rs = stmt.executeQuery( "SELECT available_quantity FROM BOOK WHERE book_id = " + id + ";" );
+            while ( rs.next() ) {
+                availableQuantity = rs.getInt("available_quantity");
+            }
+            rs.close();
+            stmt.close();
+        } catch ( Exception e ) {
+            System.err.println( e.getClass().getName()+": "+ e.getMessage() );
+            System.exit(0);
+        }
+        if(availableQuantity==0){
+            try{
+                Statement stmt = getConnection().createStatement();
+                String sql = "DELETE from BOOK where book_id = " + id + " ;";
+                stmt.executeUpdate(sql);
+                sql = "DELETE from BOOK_AUTHOR where book_id = " + id + " ;";
+                stmt.executeUpdate(sql);
+                sql = "DELETE from BOOK_GENRE where book_id = " + id + " ;";
+                stmt.executeUpdate(sql);
+                stmt.close();
+            } catch ( Exception e ) {
+                System.err.println( e.getClass().getName()+": "+ e.getMessage() );
+                System.exit(0);
+            }
+        }
+    }
+
     @Override
-    public void deleteFromTable(){
+    public void deleteFromTable(int id){
 
     }
 }

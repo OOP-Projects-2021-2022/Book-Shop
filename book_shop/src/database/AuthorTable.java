@@ -117,7 +117,7 @@ public class AuthorTable extends PostgresSQLJDBC{
     }
 
     @Override
-    public void deleteFromTable(){
+    public void deleteFromTable(int id){
 
     }
 }
