@@ -1,6 +1,6 @@
 package database;
 
-import shop.Book;
+import shop.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
@@ -28,10 +28,9 @@ public abstract class PostgresSQLJDBC {
         }
     }
 
-    public abstract void insertIntoTable(Object obj);
+    public abstract void insertIntoTable(Object obj,User user);
     public abstract void selectFromTable();
     public abstract int generateNextIdAvailable();
-    public abstract void updateTable();
     public abstract void deleteFromTable();
 
     public static void closeDatabase(){

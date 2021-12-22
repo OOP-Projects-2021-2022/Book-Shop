@@ -6,14 +6,14 @@ public class Book {
     private String title;
     private int numberOfPages;
     private int availableQuantity;
-    private float price;
+    private double price;
     private int publicationYear;
     private String language;
     private String publisher;
     private ArrayList<Author> authors = new ArrayList<>();
     private ArrayList<String> genres = new ArrayList<>();
 
-    public Book(String title, int numberOfPages, int availableQuantity, float price, int publicationYear, String language, String publisher, ArrayList<Author> authors, ArrayList<String> genres) {
+    public Book(String title, int numberOfPages, int availableQuantity, double price, int publicationYear, String language, String publisher, ArrayList<Author> authors, ArrayList<String> genres) {
         this.title = title;
         this.numberOfPages = numberOfPages;
         this.availableQuantity = availableQuantity;
@@ -23,6 +23,10 @@ public class Book {
         this.publisher = publisher;
         this.authors = authors;
         this.genres = genres;
+    }
+
+    public Book(int availableQuantity) {
+        this.availableQuantity = availableQuantity;
     }
 
     public ArrayList<Author> getAuthors() {
@@ -81,11 +85,11 @@ public class Book {
         this.availableQuantity = availableQuantity;
     }
 
-    public float getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 

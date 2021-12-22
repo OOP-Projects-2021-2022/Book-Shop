@@ -1,21 +1,19 @@
 package database;
 
-import shop.Author;
-
+import shop.*;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-public class AuthorTable extends PostgresSQLJDBC{
-
+public class GenreTable extends PostgresSQLJDBC{
     @Override
     public int generateNextIdAvailable(){
         int id;
         int maxId=0;
         try {
             Statement stmt = getConnection().createStatement();
-            ResultSet rs = stmt.executeQuery( "SELECT author_id FROM AUTHOR;" );
+            ResultSet rs = stmt.executeQuery( "SELECT genre_id FROM GENRE;" );
             while ( rs.next() ) {
-                id = rs.getInt("author_id");
+                id = rs.getInt("genre_id");
                 if(id>maxId)
                     maxId=id;
             }
@@ -28,13 +26,13 @@ public class AuthorTable extends PostgresSQLJDBC{
         return maxId+1;
     }
 
-    public boolean searchAuthor(String firstName,String lastName){
+    public boolean searchGenre(String genreName){
         int id=-1;
         try {
             Statement stmt = getConnection().createStatement();
-            ResultSet rs = stmt.executeQuery( "SELECT genre_id FROM GENRE WHERE first_name = '" + firstName + "' AND last_name = '" + lastName + ";" );
+            ResultSet rs = stmt.executeQuery( "SELECT genre_id FROM GENRE WHERE name = '" + genreName + "';" );
             while ( rs.next() ) {
-                id = rs.getInt("author_id");
+                id = rs.getInt("genre_id");
             }
             rs.close();
             stmt.close();
@@ -47,13 +45,13 @@ public class AuthorTable extends PostgresSQLJDBC{
         return true;
     }
 
-    public int getAuthorId(String firstName, String lastName){
+    public int getGenreId(String genreName){
         int id=-1;
         try {
             Statement stmt = getConnection().createStatement();
-            ResultSet rs = stmt.executeQuery( "SELECT genre_id FROM GENRE WHERE first_name = '" + firstName + "' AND last_name = '" + lastName + ";" );
+            ResultSet rs = stmt.executeQuery( "SELECT genre_id FROM GENRE WHERE name = '" + genreName + "';" );
             while ( rs.next() ) {
-                id = rs.getInt("author_id");
+                id = rs.getInt("genre_id");
             }
             rs.close();
             stmt.close();
@@ -65,18 +63,23 @@ public class AuthorTable extends PostgresSQLJDBC{
     }
 
     @Override
-    public void insertIntoTable(Object author){
+    public void insertIntoTable(Object genreName, User user){
         try {
-            if(!searchAuthor(((Author) author).getFirstName(),((Author) author).getLastName())) {
-                int id=generateNextIdAvailable();
-                Statement stmt = getConnection().createStatement();
-                String sql = "INSERT INTO GENRE (author_id, first_name, last_name)  "
-                        + "VALUES (" + id + ",'" +  ((Author) author).getFirstName() + "', '" + ((Author) author).getLastName() + "');";
-                stmt.executeUpdate(sql);
+            if(!searchGenre((String) genreName)) {
+                if(user==User.LIBRARIAN){
+                    int id=generateNextIdAvailable();
+                    Statement stmt = getConnection().createStatement();
+                    String sql = "INSERT INTO GENRE (genre_id, name)  "
+                            + "VALUES (" + id + ",'" +  genreName + "');";
+                    stmt.executeUpdate(sql);
 
-                stmt.close();
+                    stmt.close();
 
-                System.out.println("Records created successfully");
+                    System.out.println("Records created successfully");
+                }else{
+                    System.out.println("Only LIBRARIAN can modify database");
+                }
+
             } else{
                 System.out.println("Records already exist");
             }
@@ -89,16 +92,14 @@ public class AuthorTable extends PostgresSQLJDBC{
     @Override
     public void selectFromTable(){
         try {
-            System.out.println("---AUTHOR TABLE---");
+            System.out.println("---GENRE TABLE---");
             Statement stmt = getConnection().createStatement();
-            ResultSet rs = stmt.executeQuery( "SELECT * FROM AUTHOR;" );
+            ResultSet rs = stmt.executeQuery( "SELECT * FROM GENRE;" );
             while ( rs.next() ) {
-                int id = rs.getInt("author_id");
-                String  firstName = rs.getString("first_name");
-                String  lastName = rs.getString("last_name");
+                int id = rs.getInt("genre_id");
+                String  genreName = rs.getString("name");
                 System.out.println( "ID = " + id );
-                System.out.println( "FIRST NAME = " + firstName );
-                System.out.println( "LAST NAME = " + lastName );
+                System.out.println( "GENRE NAME = " + genreName );
 
                 System.out.println();
             }
@@ -109,11 +110,6 @@ public class AuthorTable extends PostgresSQLJDBC{
             System.exit(0);
         }
         System.out.println("Operation done successfully");
-    }
-
-    @Override
-    public void updateTable(){
-
     }
 
     @Override

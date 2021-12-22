@@ -1,15 +1,9 @@
 package com;
 
-import database.BookTable;
-import database.GenreTable;
-import database.PostgresSQLJDBC;
-import database.PublisherTable;
+import shop.*;
+import database.*;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-
-import java.util.Locale;
-import java.util.Scanner;
+import java.util.ArrayList;
 
 public class Main {
 
@@ -17,10 +11,10 @@ public class Main {
 
         PostgresSQLJDBC.connectToDatabase();
 
-        PublisherTable genreTable=new PublisherTable();
-        System.out.println(genreTable.getPublisherId("Treii"));
+        AuthorTable authorTable=new AuthorTable();
+        authorTable.selectFromTable();
 
-        PostgresSQLJDBC.closeDatabase();
+
 
 
  /*       Scanner in = new Scanner(System.in);

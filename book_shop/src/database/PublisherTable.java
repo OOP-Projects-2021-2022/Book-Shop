@@ -1,5 +1,6 @@
 package database;
 
+import shop.*;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
@@ -63,18 +64,23 @@ public class PublisherTable extends PostgresSQLJDBC{
     }
 
     @Override
-    public void insertIntoTable(Object publisherName){
+    public void insertIntoTable(Object publisherName, User user){
         try {
             if(!searchPublisher((String)publisherName)){
-                int id=generateNextIdAvailable();
-                Statement stmt = getConnection().createStatement();
-                String sql = "INSERT INTO PUBLISHER (publisher_id, name)  "
-                        + "VALUES (" + id + ",'" +  publisherName + "');";
-                stmt.executeUpdate(sql);
+                if(user==User.LIBRARIAN){
+                    int id=generateNextIdAvailable();
+                    Statement stmt = getConnection().createStatement();
+                    String sql = "INSERT INTO PUBLISHER (publisher_id, name)  "
+                            + "VALUES (" + id + ",'" +  publisherName + "');";
+                    stmt.executeUpdate(sql);
 
-                stmt.close();
+                    stmt.close();
 
-                System.out.println("Records created successfully");
+                    System.out.println("Records created successfully");
+                }else{
+                    System.out.println("Only LIBRARIAN can modify database");
+                }
+
             }
             else{
                 System.out.println("Records already exist");
@@ -107,11 +113,6 @@ public class PublisherTable extends PostgresSQLJDBC{
             System.exit(0);
         }
         System.out.println("Operation done successfully");
-    }
-
-    @Override
-    public void updateTable(){
-
     }
 
     @Override

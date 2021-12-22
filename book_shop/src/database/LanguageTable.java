@@ -1,5 +1,6 @@
 package database;
 
+import shop.*;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
@@ -49,7 +50,7 @@ public class LanguageTable extends PostgresSQLJDBC{
         int id=-1;
         try {
             Statement stmt = getConnection().createStatement();
-            ResultSet rs = stmt.executeQuery( "SELECT language_id FROM PUBLISHER WHERE language = '" + language + "';" );
+            ResultSet rs = stmt.executeQuery( "SELECT language_id FROM LANGUAGE WHERE language = '" + language + "';" );
             while ( rs.next() ) {
                 id = rs.getInt("language_id");
             }
@@ -63,18 +64,22 @@ public class LanguageTable extends PostgresSQLJDBC{
     }
 
     @Override
-    public void insertIntoTable(Object language){
+    public void insertIntoTable(Object language, User user){
         try {
             if(!searchLanguage((String)language)){
-                int id=generateNextIdAvailable();
-                Statement stmt = getConnection().createStatement();
-                String sql = "INSERT INTO LANGUAGE (language_id, language)  "
-                        + "VALUES (" + id + ",'" +  language + "');";
-                stmt.executeUpdate(sql);
+                if(user==User.LIBRARIAN){
+                    int id=generateNextIdAvailable();
+                    Statement stmt = getConnection().createStatement();
+                    String sql = "INSERT INTO LANGUAGE (language_id, language)  "
+                            + "VALUES (" + id + ",'" +  language + "');";
+                    stmt.executeUpdate(sql);
 
-                stmt.close();
+                    stmt.close();
 
-                System.out.println("Records created successfully");
+                    System.out.println("Records created successfully");
+                }else{
+                    System.out.println("Only LIBRARIAN can modify database");
+                }
             }
             else{
                 System.out.println("Records already exist");
@@ -107,11 +112,6 @@ public class LanguageTable extends PostgresSQLJDBC{
             System.exit(0);
         }
         System.out.println("Operation done successfully");
-    }
-
-    @Override
-    public void updateTable(){
-
     }
 
     @Override
