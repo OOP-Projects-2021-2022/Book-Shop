@@ -12,6 +12,7 @@ public class Main {
         PostgresSQLJDBC.connectToDatabase();
 
 
+
  /*       Scanner in = new Scanner(System.in);
         String inputStr, inputOp, name, username,pages;
         int pageNr;
@@ -65,5 +66,8 @@ public class Main {
                 case "q": System.exit(0);
             }
         }*/
+    }
+    public void run() {
+        System.out.println("This code is running in a thread");
     }
 }
