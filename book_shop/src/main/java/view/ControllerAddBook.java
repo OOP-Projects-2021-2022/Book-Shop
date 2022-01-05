@@ -183,6 +183,7 @@ public class ControllerAddBook {
             }else{
                 succes.setText("This book is already in the shop");
             }
+            addBookButton.setDisable(true);
         }catch(RuntimeException exception){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
